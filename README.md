@@ -10,8 +10,10 @@
 <summary>Hashcrack</summary>
   
 When we use _netcat_ to get the server, we are given a hash. Checking its length, we see it's 32 characters, or 128 bits, typical of MD5. 
+
 Using ```hashcat -m 0 -a 0 <hash> /usr/share/wordlists/rockyou.txt``` we crack the password pretty quick.
 The next hash is 40 char long, or 160 bits. Trying first with SHA-1, ```hashcat -m 0 -a 100 <hash> /usr/share/wordlists/rockyou.txt``` we again obtain the password. 
+
 One last time, the hash is of length 64, or 256 bits. Supposing it's SHA-256 and running the same command with ```-a 1400```, we obtain the flag.
 
 # Reverse Engineering
