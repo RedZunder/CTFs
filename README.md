@@ -1,8 +1,47 @@
 # My picoCTF exercises
 
 ## [My picoCTF profile](https://play.picoctf.org/users/RedZunder)
+- [Web exploitation](#web-exploitation)
 - [Cryptography](#cryptography)
 - [Reverse engineering](#reverse-engineering)
+
+
+# Web Exploitation
+<details open>
+  <summary>SSTI1</summary>
+  
+  Entering the target website, we find an input field which 'announces' the user input. As inferred from the title of this CTF, we are looking to Server Side Template Injection.
+  Using this workflow from [Cobalt](https://www.cobalt.io/blog/a-pentesters-guide-to-server-side-template-injection-ssti):
+  ![image](https://github.com/user-attachments/assets/64991461-7402-4241-959a-9405862694a3)
+
+  `$(7*7)` simply returns that literal string. Writing `{{7*7}}`, however, returns `49`. Sending `{{7*'7'}}` gives back `7777777`, suggesting the server might be running **Jinja2**.
+  Now we can run commands like this one: `{{request.application.__globals__.__builtins__.__import__('os').popen('ls').read()}}` to see the files in the directory. Doing this we find a `flag` file.
+  Naturally, we try to read this file: `{{request.application.__globals__.__builtins__.__import__('os').popen('cat flag').read()}}` which returns the flag successfully.
+
+  
+
+
+
+
+
+  
+</details>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # Cryptography
 
