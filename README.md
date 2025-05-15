@@ -4,6 +4,7 @@
 - [Web exploitation](#web-exploitation)
 - [Cryptography](#cryptography)
 - [Reverse engineering](#reverse-engineering)
+- [General Skills](#general-skills)
 
 
 # Web Exploitation
@@ -128,3 +129,36 @@ We can then inject the code ```blablabla; RETURN 0``` in order to trigger the RE
 
 
 </details>
+
+
+
+# General Skills
+
+<details open>
+<summary>Plumbing</summary>
+  
+This challenge is trivial: simply `nc` to the machine and obtain a large text, then I used `| grep 'pico'` and obtained the flag.
+
+<details open>
+<summary>Based</summary>
+
+Also a trivial challenge, we must translate from binary, octal and hex to ascii within 45 seconds. I simply used online tools to translate the inputs, and obtain the flag.
+
+</details>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
