@@ -146,6 +146,28 @@ Also a trivial challenge, we must translate from binary, octal and hex to ascii 
 
 </details>
 
+<details open>
+  <summary>dont-you-love-banners</summary>
+  
+  For this task we use `netcat` first to a 'leaking' server, which gives us a password in plain text.
+  Next, we `nc` to the target machine, which prompts us for the password, which we obtained from the other machine. After answering some questions, we find ourselves in the shell:
+
+![image](https://github.com/user-attachments/assets/c93fe9bc-4517-4866-983d-dc2146794efc)
+
+Poking around we find the root folder which contains the flag:
+```shell
+$ls /root
+> flag.txt  script.py
+```
+However we don't have permissions to open the flag. Doing `cat script.py` we find the reference to another file:
+```python
+with open("/home/player/banner", "r") as f:
+        print(f.read())
+```
+So we only need to replace the `banner` file for `flag.txt`. For that we use a _symlink_. Travelling to the `player` folder which contains the banner:  `rm banner; ln -s /root/flag.txt banner`
+This swaps the banner for a file pointing to our flag. Now we can use `netcat` again to contact the server, and we get the flag in plaintext.
+
+</details>
 
 
 
